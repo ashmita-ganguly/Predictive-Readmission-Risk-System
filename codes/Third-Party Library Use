@@ -1,0 +1,16 @@
+import pandas as pd
+
+data = {
+    'Diagnosis_Code': ['I10', 'E11', 'J44', 'I10', 'E11', 'I10'],
+    'Readmitted': [0, 1, 1, 0, 0, 1]
+}
+df = pd.DataFrame(data)
+
+readmission_rate_by_diagnosis = df.groupby('Diagnosis_Code')['Readmitted'].mean().reset_index()
+readmission_rate_by_diagnosis.columns = ['Diagnosis_Code', 'Readmission_Rate']
+
+print("--- Mock Patient Data ---")
+print(df)
+
+print("\n--- Readmission Rate by Diagnosis ---")
+print(readmission_rate_by_diagnosis.sort_values(by='Readmission_Rate', ascending=False))
