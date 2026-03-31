@@ -1,0 +1,49 @@
+class DataCleaner:
+    """
+    A class for cleaning and preparing patient data features.
+    """
+    def _init_(self, data_frame):
+        self.data = data_frame
+
+    def handle_missing_age(self, strategy="median"):
+        """Fills missing age values using a specified strategy."""
+        if strategy == "median":
+            fill_value = self.data['Age'].median()
+        elif strategy == "mean":
+            fill_value = self.data['Age'].mean()
+        else:
+            print("Invalid strategy.")
+            return
+
+        self.data['Age'] = self.data['Age'].fillna(fill_value)
+        print(f"Missing ages filled with: {round(fill_value, 1)}")
+
+    def check_data_size(self):
+        """Returns the number of rows and columns."""
+        return self.data.shape
+
+class MockDataFrame:
+    def _init_(self, data):
+        self._data = data
+    
+    def _getitem_(self, key):
+        return self._data[key]
+    
+    def _setitem_(self, key, value):
+        self._data[key] = value
+
+    def fillna(self, value):
+        
+        new_list = [value if x is None else x for x in self._data['Age']]
+        return new_list
+
+    def median(self): return 65
+    def mean(self): return 62.5
+    def shape(self): return (4, 2)
+
+mock_data = MockDataFrame({'Patient_ID': [1, 2, 3, 4], 'Age': [60, 70, None, 50]})
+cleaner = DataCleaner(mock_data)
+
+print(f"Original Age data: {mock_data['Age']}")
+cleaner.handle_missing_age(strategy="median")
+print(f"Cleaned Age data: {mock_data['Age']}")
