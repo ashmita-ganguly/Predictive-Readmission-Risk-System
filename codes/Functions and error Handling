@@ -1,0 +1,24 @@
+def calculate_risk_score(age: int, num_medications: int) -> float:
+    """
+    Simulates a simplified function to calculate a readmission risk score.
+    In the real project, this function would load and use the trained XGBoost model.
+    """
+    if not isinstance(age, int) or not isinstance(num_medications, int):
+        raise TypeError("Age and number of medications must be integers.")
+    
+    
+    base_risk = 0.1
+    age_factor = age * 0.005
+    meds_factor = num_medications * 0.03
+    
+    score = min(base_risk + age_factor + meds_factor, 0.99)
+    
+    return round(score, 3)
+
+score_1 = calculate_risk_score(age=75, num_medications=10)
+print(f"Patient A Risk Score: {score_1}")
+
+try:
+    calculate_risk_score(age="seventy-five", num_medications=10)
+except TypeError as e:
+    print(f"Error caught: {e}")
